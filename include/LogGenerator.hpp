@@ -9,15 +9,20 @@ public:
     LogGenerator();
     ~LogGenerator() = default;
 
-    // 大量ダミーログの高速生成ロジック
     std::string generateDummyLog();
-
-    // 1-A仕様：ハッカーの確定性を2進数から破壊する確率ツマミ（サイバー欺瞞）
     bool shouldTriggerDeception(int sessionSeverity);
 
+    // 2-A仕様：サーバーサイド時間に基づく自律変動暗号トークンの生成
+    std::string generateSecureToken(const std::string& userId);
+
+    // 2-A仕様：過去時間偽装をナノ秒単位で検知して破砕する検証ロジック
+    bool verifyToken(const std::string& userId, const std::string& token);
+
 private:
-    // std::rand の短い周期を克服する、天文学的周期のメルセンヌ・ツイスタ疑似乱数生成器
     std::mt19937 m_twister;
+    
+    // トークンの偽造を防ぐためのサーバー内秘匿のソルト（秘密鍵）
+    const std::string m_secret_salt = "Vestige_Secret_Salt_2026_Anti_Replay";
 };
 
 #endif // LOG_GENERATOR_HPP
